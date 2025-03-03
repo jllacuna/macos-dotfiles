@@ -1,0 +1,109 @@
+local wezterm = require "wezterm"
+
+local config = wezterm.config_builder()
+
+config.color_scheme = "Jellybeans"
+
+config.font = wezterm.font "Hack"
+config.font_size = 12
+
+-- Black Monster Hunter themed background
+config.background = {
+  {
+    source = { File = "{{ .chezmoi.homeDir }}/.local/share/backgrounds/black.png" }, -- Black pixel
+    opacity = 0.9,
+  },
+  {
+    source = { File = "{{ .chezmoi.homeDir }}/.local/share/backgrounds/rathalos.png" },
+    opacity = 0.1,
+    horizontal_align = "Right",
+    vertical_offset = 100,
+    horizontal_offset = -100,
+    width = 1200 / 1.5, -- original is 1200
+    height = 976 / 1.5, -- original is 976
+    repeat_x = "NoRepeat",
+    repeat_y = "NoRepeat",
+  },
+  {
+    source = { File = "{{ .chezmoi.homeDir }}/.local/share/backgrounds/hunter.png" },
+    opacity = 0.1,
+    vertical_align = "Bottom",
+    vertical_offset = -25,
+    horizontal_offset = 25,
+    width = 2475 / 7, -- original is 2475
+    height = 2484 / 7, -- original is 2484
+    repeat_x = "NoRepeat",
+    repeat_y = "NoRepeat",
+  },
+}
+config.macos_window_background_blur = 10
+
+-- Minimal window chrome
+config.window_decorations = "RESIZE" -- Needed to maximize on startup
+
+-- Custom tab bar
+config.enable_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = true
+config.tab_bar_at_bottom = true
+config.use_fancy_tab_bar = false -- Disable native OS tabs
+config.colors = {
+  tab_bar = {
+    background = "#242424",
+
+    active_tab = {
+      bg_color = "#0a455c",
+      fg_color = "#ffffff",
+    },
+
+    inactive_tab = {
+      bg_color = "#242424",
+      fg_color = "#595959",
+    },
+
+    inactive_tab_hover = {
+      bg_color = "#242424",
+      fg_color = "#b3b3b3",
+    },
+
+    new_tab = {
+      bg_color = "#595959",
+      fg_color = "#d1d1d1",
+    },
+
+    new_tab_hover = {
+      bg_color = "#1278a1",
+      fg_color = "#d1d1d1",
+    }
+  },
+}
+
+-- Make fonts look nice
+config.front_end = "WebGpu" -- Use MacOS GPU acceleration
+config.anti_alias_custom_block_glyphs = true -- default
+config.freetype_load_target = "Light"
+
+-- Custom key bindings
+config.keys = {
+  -- Change SUPER+n to open a new window in the user's home directory
+  -- Can still use CTRL+SHIFT+n to open a new window in the same directory of the current pane
+  {
+    key = "n",
+    mods = "SUPER",
+    action = wezterm.action.SpawnCommandInNewWindow { cwd = wezterm.home_dir },
+  },
+  -- Change SUPER+t to open a new tab in the user's home directory
+  -- Can still use CTRL+SHIFT+t to open a new tab in the same directory of the current pane
+  {
+    key = "t",
+    mods = "SUPER",
+    action = wezterm.action.SpawnCommandInNewTab { cwd = wezterm.home_dir },
+  },
+}
+
+-- Maximize on startup
+wezterm.on("gui-startup", function()
+  local _, _, window = wezterm.mux.spawn_window{}
+  window:gui_window():maximize()
+end)
+
+return config

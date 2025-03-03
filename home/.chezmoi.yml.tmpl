@@ -1,0 +1,17 @@
+{{ $fullName := promptString "Full name" -}}
+{{ $bitbucketEmail := promptString "Bitbucket email" -}}
+{{ $bitbucketSubdomain := promptString "Bitbucket subdomain" -}}
+{{ $githubEmail := promptString "Github private email" -}}
+encryption: age
+age:
+  identity: ~/.config/chezmoi/key.txt
+  recipient: age16kcfp4pquck73xt79jpxs0qheqke6pyrsdy97p3xueqthzcmv9wqs93t6c
+data:
+  fullName: {{ $fullName }}
+  nerdFont: Hack
+  git:
+    bitbucket:
+      email: {{ $bitbucketEmail }}
+      subdomain: {{ $bitbucketSubdomain }}
+    github:
+      email: {{ $githubEmail }}

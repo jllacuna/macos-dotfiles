@@ -1,0 +1,123 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+final_space: true
+version: 3
+console_title_template: "{{ .Pwd }}"
+palette:
+  light-purple: "#c6b6ee"
+  fuschia: "#a11278"
+  mid-orange: "#f09875"
+  light-yellow: "#deeeb6"
+  mid-green: "#75f098"
+  green: "#12a13a"
+  dark-green: "#0a5c21"
+  mid-blue: "#75cdf0"
+  white: "#fff"
+  light-grey: "#d1d1d1"
+  grey: "#595959"
+  dark-grey: "#242424"
+  mid-red: "#f76e8b"
+  red: "#aa092c"
+  dark-red: "#610519"
+transient_prompt:
+  foreground: p:mid-green
+  template: "<p:mid-blue>\u203a</>\u276f "
+secondary_prompt:
+  foreground: p:grey
+  template: "\U000f19b0 "
+blocks:
+  - type: prompt
+    alignment: left
+    segments:
+      - type: text
+        style: plain
+        foreground: p:mid-green
+        template: "\u256d\u2500 "
+      # If connected via SSH, display username and hostname
+      - type: session
+        style: plain
+        foreground: p:light-yellow
+        template: "{{ if .SSHSession }}<p:grey>\ueba9</> {{ .UserName }}<p:light-grey>@</>{{ .HostName }} {{ end }}"
+      - type: battery
+        style: plain
+        foreground: p:mid-green
+        foreground_templates:
+          - "{{ if le .Percentage 15 }}p:mid-red{{ end }}"
+          - "{{ if le .Percentage 30 }}p:mid-orange{{ end }}"
+        template: "{{ if .Segments.Contains \"Session\" }}{{ .Icon }} {{ .Percentage }}% {{ end }}"
+        properties:
+          discharging_icon: "\udb85\udfe4"
+          charging_icon: "\udb80\udc84"
+          charged_icon: "\udb85\udfe2"
+      # If not in a git repo, display the full path
+      - type: path
+        style: plain
+        foreground: p:mid-blue
+        template: "{{ if not (.Segments.Contains \"GitRepo\") }}{{ .Path }} {{ end }}"
+        properties:
+          home_icon: "\uf015 ~"
+          style: full
+      - type: git
+        alias: GitRepo
+        style: diamond
+        leading_diamond: "\ue0b6"
+        trailing_diamond: "\ue0b4 "
+        foreground: p:white
+        background: p:dark-grey
+        template: "{{ .UpstreamIcon }} {{ .RepoName }}"
+        properties:
+          fetch_upstream_icon: true
+      # Display the relative git path
+      - type: git
+        alias: GitPath
+        style: plain
+        foreground: p:mid-blue
+        template: "{{ if ne .Dir .PWD }}\ue702 {{ trimPrefix (print .Dir \"/\") .PWD }} {{ end }}"
+  - type: prompt
+    alignment: right
+    segments:
+      - type: git
+        alias: GitStatus
+        style: diamond
+        leading_diamond: "\ue0b6"
+        foreground: p:white
+        background: p:green
+        background_templates:
+          - "{{ if gt .Behind 0 }}p:red{{ end }}"
+          - "{{ if or (gt .Ahead 0) .Working.Changed .Staging.Changed }}p:fuschia{{ end }}"
+        template: "{{ .HEAD }}{{ if gt .Behind 0 }} -{{ .Behind }}{{ end }}{{ if gt .Ahead 0}} +{{ .Ahead}}{{ end }}"
+        properties:
+          branch_icon: "<p:light-purple><b>\ue0a0</b></> "
+          fetch_status: true
+      - type: git
+        alias: GitWorking
+        style: powerline
+        powerline_symbol: "\ue0b4"
+        foreground: p:dark-red
+        background: p:mid-red
+        template: "{{ if .Working.Changed }} <p:dark-grey><b>\uf448</b></> {{ .Working.String }}{{ end }}"
+        properties:
+          fetch_status: true
+      - type: git
+        alias: GitStaging
+        style: powerline
+        powerline_symbol: "\ue0b4"
+        foreground: p:dark-green
+        background: p:mid-green
+        template: "{{ if .Staging.Changed }} <p:dark-grey><b>\uf0c7</b></> {{ .Staging.String }}{{ end }}"
+        properties:
+          fetch_status: true
+      - type: git
+        alias: GitCommit
+        style: powerline
+        powerline_symbol: "\ue0b4"
+        foreground: p:dark-grey
+        background: p:white
+        template: " {{ printf \"%.7s\" .Commit.Sha }}"
+  - type: prompt
+    alignment: left
+    newline: true
+    segments:
+      - type: shell
+        style: plain
+        foreground: p:mid-green
+        template: "\u2570{{ if ne .Name \"zsh\" }}{{ .Name  }}{{ end }}\u276f"

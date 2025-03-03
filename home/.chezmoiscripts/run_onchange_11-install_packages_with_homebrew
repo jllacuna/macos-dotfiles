@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+echo "Installing packages with homebrew"
+brew install \
+  age \
+  bat \
+  eza \
+  fd \
+  font-hack font-hack-nerd-font \
+  fzf \
+  git-delta \
+  jandedobbeleer/oh-my-posh/oh-my-posh \
+  jesseduffield/lazydocker/lazydocker \
+  jesseduffield/lazygit/lazygit \
+  jq \
+  ripgrep \
+  tmux \
+  vivid \
+  watch \
+  zoxide

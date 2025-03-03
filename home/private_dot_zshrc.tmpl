@@ -1,0 +1,137 @@
+# history
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+
+# options
+
+# Auto cd into directory typed as a command without preceding cd
+setopt auto_cd
+
+# Extended filename globbing
+setopt extended_glob
+
+# Extended history information
+setopt extended_history
+
+# Share history across sessions
+setopt share_history
+
+# Append command history
+# Combines commands from parallel zsh sessions
+setopt append_history
+
+# Remove prior duplicate commands when adding a command to history
+setopt hist_ignore_all_dups
+
+# On save, skip older duplicate commands
+setopt hist_save_no_dups
+
+# Allow comments in interactive shells
+setopt interactive_comments
+
+# Print an error if filename glob has no match
+setopt nomatch
+
+# vim mode
+bindkey -v
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select () {
+  case $KEYMAP in
+    vicmd) echo -ne '\e[1 q';;      # block
+    viins|main) echo -ne '\e[5 q';; # beam
+  esac
+}
+zle -N zle-keymap-select
+# Use beam shape cursor on startup.
+echo -ne '\e[5 q'
+# Use beam shape cursor for each new prompt.
+preexec() { echo -ne '\e[5 q' ;}
+
+# fpath
+if (( ! $fpath[(I){{ .chezmoi.homeDir }}/.zsh/completion] )); then
+  fpath=({{ .chezmoi.homeDir }}/.zsh/completion $fpath)
+fi
+
+# Map zsh HOST to bash HOSTNAME
+# https://unix.stackexchange.com/a/209394
+HOSTNAME=$HOST
+
+# Colors for ls, tree, fd, etc.
+export LS_COLORS="$(vivid generate jellybeans)"
+
+# alias-tips.plugin.zsh
+export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Try alias: "
+# Won't see alias tip for clr => clear since it'll be cleared immediately
+export ZSH_PLUGINS_ALIAS_TIPS_EXCLUDES="clr xit"
+
+# Use fd to traverse the file system
+export FZF_DEFAULT_COMMAND='fd --type file --type dir --type symlink --color always --hidden --follow --exclude .git'
+# Display fzf top-down with colors
+# WARNING: --ansi may slow down performance: https://github.com/junegunn/fzf#performance
+export FZF_DEFAULT_OPTS="--ansi --layout=reverse --preview-window=down,border-top"
+
+# Use fd for CTRL-T
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use fd for ALT-C, and preview the directory with tree
+export FZF_ALT_C_COMMAND='fd --type dir --color always --hidden --follow --exclude .git'
+export FZF_ALT_C_OPTS='--preview "tree -C {} | head -200"'
+
+# Colorize man pages with bat
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# ripgrep config
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/ripgreprc"
+
+# zoxide config -- Use eza to preview directories when using fzf to find a directory
+export _ZO_FZF_OPTS="--ansi --layout=reverse --height=~50% --preview='eza --color=always --icons always --grid {2}' --preview-window=down,border-top"
+
+# jq colors
+export JQ_COLORS="38;5;242:38;5;52:38;5;22:38;5;203:38;5;35:38;5;254:38;5;254:38;5;39"
+
+# completions
+zstyle :compinstall filename '{{ .chezmoi.homeDir }}/.zshrc'
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+
+autoload -Uz compinit
+compinit
+
+# aliases
+alias clr='clear'
+alias xit='exit'
+# Show colors by default with ls
+alias ls='eza --icons always --color=always'
+# Show all files in long format
+alias ll='ls -laa'
+alias lt='ls -la --tree --level 5 --ignore-glob ".git"'
+# Use bat instead of cat
+alias cat='bat --paging=never'
+# Format --help with bat
+alias -g -- --help='--help 2>&1 | bat -l help --style=plain'
+# Fuzzy find files (with preview) and open them in nvim
+# alias ffv='fd --type file --color always --hidden --exclude .git | fzf --multi --bind "f1:toggle-all" --bind "enter:become(nvim {+})" --preview "bat --color=always --style=numbers,changes --line-range=:200 {}"'
+
+# alias nvim
+alias e={{ .chezmoi.homeDir }}/workspace/docker-vim/nvim/nvim
+
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
+# zoxide completions
+eval "$(zoxide init --cmd cd zsh)"
+
+# Oh My Posh
+eval "$(oh-my-posh init zsh --config ~/.config/oh-my-posh/themes/jellybeans.omp.yml)"
+
+# WARNING: fzf-tab needs to be loaded after compinit but before syntax highlighting and autosuggestions
+# https://github.com/Aloxaf/fzf-tab?tab=readme-ov-file#install
+source ~/.zsh/plugins/fzf-tab/fzf-tab.plugin.zsh
+
+source ~/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/plugins/alias-tips/alias-tips.plugin.zsh
+
+# zsh-syntax-highlighting
+ZSH_HIGHLIGHT_STYLES[comment]="fg=#888"

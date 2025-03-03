@@ -1,0 +1,68 @@
+[".zsh/plugins/zsh-syntax-highlighting"]
+  type = "archive"
+  url = "https://github.com/zsh-users/zsh-syntax-highlighting/archive/master.tar.gz"
+  exact = true
+  stripComponents = 1
+  refreshPeriod = "168h"
+[".zsh/plugins/zsh-autosuggestions"]
+  type = "archive"
+  url = "https://github.com/zsh-users/zsh-autosuggestions/archive/master.tar.gz"
+  exact = true
+  stripComponents = 1
+  refreshPeriod = "168h"
+[".zsh/plugins/alias-tips"]
+  type = "archive"
+  url = "https://github.com/djui/alias-tips/archive/master.tar.gz"
+  exact = true
+  stripComponents = 1
+  refreshPeriod = "168h"
+[".zsh/plugins/fzf-tab"]
+  type = "archive"
+  url = "https://github.com/Aloxaf/fzf-tab/archive/master.tar.gz"
+  exact = true
+  stripComponents = 1
+  refreshPeriod = "168h"
+[".zsh/completion/_fzf"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/lmburns/dotfiles/master/.config/zsh/completions/_fzf"
+  refreshPeriod = "168h"
+[".zsh/completion/_eza"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/eza-community/eza/main/completions/zsh/_eza"
+  refreshPeriod = "168h"
+[".zsh/completion/_git"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh"
+  refreshPeriod = "168h"
+[".zsh/completion/_rustc"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/rust/_rustc"
+  refreshPeriod = "168h"
+[".config/bat/themes/Boron.tmTheme"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/mjio/boron.tmtheme/master/Boron.tmTheme"
+  refreshPeriod = "168h"
+[".config/bat/syntaxes/nushell.sublime-syntax"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/kurokirasama/nushell_sublime_syntax/refs/heads/main/nushell.sublime-syntax"
+  refreshPeriod = "168h"
+  # Hack: Fix regex error in nushell syntax file
+  # see: https://github.com/kurokirasama/nushell_sublime_syntax/issues/4
+  filter.command = "sed"
+  filter.args = [ "-e", 's/| *? *|/| \\? |/g' ]
+[".config/bat/syntaxes/ledger.sublime-syntax"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/etienne-monier/LedgerTools/refs/heads/master/Ledger.sublime-syntax"
+  refreshPeriod = "168h"
+[".config/bat/syntaxes/tmux.sublime-syntax"]
+  type = "file"
+  readonly = true
+  url = "https://raw.githubusercontent.com/gerardroche/sublime-tmux/refs/heads/master/Tmux.sublime-syntax"
+  refreshPeriod = "168h"
