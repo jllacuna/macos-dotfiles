@@ -13,8 +13,12 @@ brew install \
   jesseduffield/lazydocker/lazydocker \
   jesseduffield/lazygit/lazygit \
   jq \
+  miller \
+  p7zip \
   ripgrep \
+  rom-tools \
   tmux \
   vivid \
   watch \
+  wget \
   zoxide
