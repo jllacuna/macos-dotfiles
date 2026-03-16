@@ -21,4 +21,5 @@ brew install \
   vivid \
   watch \
   wget \
+  xdelta \
   zoxide
