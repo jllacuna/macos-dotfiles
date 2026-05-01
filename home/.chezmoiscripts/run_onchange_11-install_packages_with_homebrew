@@ -9,6 +9,7 @@ brew install \
   font-hack font-hack-nerd-font \
   fzf \
   git-delta \
+  imagemagick \
   jandedobbeleer/oh-my-posh/oh-my-posh \
   jesseduffield/lazydocker/lazydocker \
   jesseduffield/lazygit/lazygit \
